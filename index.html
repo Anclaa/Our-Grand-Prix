@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#121229">
+  <meta name="description" content="Ponte al volante del #33 y recorre los recuerdos de nuestro primer año.">
+  <title>Our Grand Prix — La carrera de nuestra historia</title>
+  <link rel="icon" href="./assets/gp.svg" type="image/svg+xml">
+  <link rel="preload" href="./assets/barlow-race.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="./style.css">
+  <script defer src="./assets/vendor/three.min.js"></script>
+  <script defer src="./recuerdos.js"></script>
+  <script defer src="./render-canvas.js"></script>
+  <script defer src="./miniaturas.js"></script>
+  <script defer src="./mundo.js"></script>
+  <script defer src="./race.js"></script>
+</head>
+<body>
+  <main class="experience" id="experience" tabindex="-1" data-phase="intro">
+    <div class="world" id="world" aria-hidden="true"></div>
+    <div class="world-grain" aria-hidden="true"></div>
+    <header class="site-header">
+      <button class="brand" id="home" type="button" aria-label="Our Grand Prix, ver la parrilla"><i aria-hidden="true"></i> OUR<span>GP</span></button>
+      <div class="header-actions">
+        <button class="control-chip" id="overview" type="button" aria-pressed="false" hidden>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="m2.5 6.5 6-3 7 3 6-3v14l-6 3-7-3-6 3zM8.5 3.5v14m7-11v14"/></svg><span>Mapa</span>
+        </button>
+        <button class="control-chip" id="album-button" type="button">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="3.5" y="4.5" width="17" height="15" rx="2"/><circle cx="9" cy="9.5" r="1.5"/><path d="m4 17 5.5-4.5 3 2.5 3.5-4 4.5 4"/></svg><span>Álbum</span>
+        </button>
+        <button class="control-chip" id="sound" type="button" aria-pressed="false" aria-label="Activar música">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4V5Z"/><path class="sound-on" d="M15 9a4 4 0 0 1 0 6m3-9a8 8 0 0 1 0 12"/><path class="sound-off" d="m16 10 5 5m0-5-5 5"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <section class="welcome" id="welcome" aria-labelledby="main-title">
+      <p class="eyebrow"><i aria-hidden="true"></i> NUESTRO PRIMER ANIVERSARIO</p>
+      <h1 id="main-title"><span>OUR</span><span>GRAND PRIX<span class="title-dot">.</span></span></h1>
+      <p class="subtitle">La carrera de nuestra historia</p>
+      <p class="welcome-copy">Cinco paradas que guardan un pedacito de este año juntos. <span>Hoy tú llevas el volante, amor.</span></p>
+      <div class="launch">
+        <button class="primary" id="start-race" type="button"><i class="flag" aria-hidden="true"></i> Entrar al circuito</button>
+        <span class="small-note">5 paradas <span aria-hidden="true">·</span> 20 fotos</span>
+      </div>
+    </section>
+
+    <div class="scene-caption" id="scene-caption" aria-hidden="true"><i></i> CIRCUITO DE ANIVERSARIO <span> / </span> MONOPLAZA 33</div>
+
+    <div class="countdown" id="countdown" hidden>
+      <div class="starting-lights" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+      <p id="countdown-label">En la parrilla</p>
+    </div>
+
+    <aside class="hud" id="hud" aria-label="Información de carrera" hidden>
+      <div class="lap-card">
+        <span class="lap-id">33</span>
+        <div><p id="race-stage">En pista</p><span id="next-stop">Acércate a una parada</span></div>
+      </div>
+      <div class="map-card" id="map-card">
+        <div class="map-title"><span>Circuito</span><span id="memory-count">0 / 5</span></div>
+        <canvas id="minimap" width="192" height="141" role="img" aria-label="Mapa del circuito, tu posición y las cinco paradas"></canvas>
+        <div class="map-caption"><span><i></i> Tú</span><span>♥ Recuerdos</span></div>
+      </div>
+    </aside>
+
+    <div class="drive-ui" id="drive-ui" hidden>
+      <div class="drive-hint">
+        <div class="keyboard-help"><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> o <kbd>↑</kbd><kbd>←</kbd><kbd>↓</kbd><kbd>→</kbd> Conducir <span><kbd>Espacio</kbd> Freno</span></div>
+        <button class="control-chip" id="assist" aria-pressed="false" type="button">Pilotaje asistido</button>
+        <button class="control-chip" id="recover" type="button" aria-label="Volver a la pista" title="Volver a la pista">↺</button>
+      </div>
+      <div class="pedals" aria-label="Controles táctiles">
+        <div class="steering">
+          <button type="button" data-control="left" aria-label="Girar a la izquierda">←</button>
+          <button type="button" data-control="right" aria-label="Girar a la derecha">→</button>
+        </div>
+        <div class="throttle">
+          <button type="button" data-control="reverse" aria-label="Frenar y marcha atrás">↓</button>
+          <button type="button" data-control="forward" aria-label="Acelerar">↑</button>
+        </div>
+      </div>
+    </div>
+    <button class="primary interact" id="interact" type="button" hidden></button>
+    <p class="sr-only" id="announcement" role="status" aria-live="polite"></p>
+
+    <section class="compatibility" id="compatibility" hidden aria-label="Modo alternativo">
+      <p>Este navegador no pudo mostrar el circuito en 3D.</p>
+      <button class="primary" id="story-mode" type="button">Recorrer los recuerdos</button>
+    </section>
+  </main>
+
+  <dialog id="album" class="album-dialog" aria-labelledby="album-title">
+    <div class="album-header">
+      <div><p class="eyebrow"><i aria-hidden="true"></i> LAS FOTOS DEL RECORRIDO</p><h2 id="album-title">Nuestro álbum</h2></div>
+      <button type="button" class="close-button" id="close-album" aria-label="Cerrar álbum">×</button>
+    </div>
+    <p class="album-help" id="album-help"></p>
+    <div class="album-grid" id="album-grid"></div>
+  </dialog>
+
+  <dialog class="memory-dialog" id="memory-dialog" aria-labelledby="memory-title">
+    <div class="memory-layout">
+      <div class="print-area">
+        <figure class="photo-print">
+          <img id="memory-image" alt="">
+          <figcaption id="photo-caption"></figcaption>
+        </figure>
+        <div class="photo-nav">
+          <button id="previous-photo" type="button" aria-label="Foto anterior">‹</button>
+          <span id="photo-count" role="status"></span>
+          <button id="next-photo" type="button" aria-label="Foto siguiente">›</button>
+        </div>
+      </div>
+      <div class="memory-copy">
+        <button class="close-button" id="close-memory" type="button" aria-label="Cerrar recuerdo">×</button>
+        <p class="eyebrow" id="memory-sector"></p>
+        <h2 id="memory-title" tabindex="-1"></h2>
+        <p id="memory-story"></p>
+        <button class="primary" id="continue-race" type="button">Volver a la pista</button>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog class="finish-dialog" id="finish" aria-labelledby="finish-title">
+    <div class="finish-picture" aria-hidden="true"></div>
+    <div class="finish-content">
+      <button class="close-button" id="close-finish" type="button" aria-label="Cerrar dedicatoria">×</button>
+      <p class="eyebrow"><i class="flag" aria-hidden="true"></i> BANDERA A CUADROS</p>
+      <h2 id="finish-title" tabindex="-1">Feliz primer año, amor.</h2>
+      <blockquote>“De todas las carreras de mi vida, mi favorita es la que estoy viviendo contigo.” ❤️</blockquote>
+      <p>Gracias por las risas, por las aventuras y por todos esos días que ahora son mis recuerdos favoritos. Volvería a elegirte en cada vuelta.</p>
+      <div class="finish-actions">
+        <button class="primary" id="finish-album" type="button">Abrir el álbum</button>
+        <button class="control-chip" id="replay" type="button">Correr otra vuelta</button>
+      </div>
+    </div>
+  </dialog>
+  <audio id="music" src="./assets/una-vuelta-contigo.mp3" preload="none" loop></audio>
+  <noscript>Activa JavaScript para conducir y descubrir los recuerdos.</noscript>
+</body>
+</html>
